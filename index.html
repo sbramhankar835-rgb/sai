@@ -1,0 +1,96 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Number QR Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f2f5f9;
+      padding: 20px;
+    }
+
+    .box {
+      max-width: 450px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 4px 15px #bbb;
+    }
+
+    h1 {
+      color: #222;
+    }
+
+    #reader {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #eef7ee;
+      font-size: 18px;
+      word-break: break-word;
+    }
+
+    button {
+      border: 0;
+      padding: 12px 18px;
+      margin: 8px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .call {
+      background: #20b957;
+      color: white;
+    }
+
+    .whatsapp {
+      background: #25D366;
+      color: white;
+    }
+  </style></head><body><div class="box">
+  <h1>📱 Mobile No Scanner</h1>  <p>Scan a QR code containing a mobile number.</p>  <div id="reader"></div>  <div id="result">
+    No number scanned yet.
+  </div>
+</div><script>
+  let scanner = new Html5Qrcode("reader");
+
+  function onScanSuccess(decodedText) {
+    document.getElementById("result").innerHTML =
+      "📱 Mobile Number:<br><br><b>" + decodedText + "</b>" +
+      "<br><br>" +
+      '<a href="tel:' + decodedText + '">' +
+      '<button class="call">📞 Call</button></a>' +
+      '<a href="https://wa.me/' + decodedText.replace(/\D/g, '') + '">' +
+      '<button class="whatsapp">💬 WhatsApp</button></a>';
+
+    scanner.stop().catch(() => {});
+  }
+
+  function onScanFailure(error) {
+    // Keep scanning
+  }
+
+  scanner.start(
+    { facingMode: "environment" },
+    {
+      fps: 10,
+      qrbox: { width: 250, height: 250 }
+    },
+    onScanSuccess,
+    onScanFailure
+  ).catch(function(error) {
+    document.getElementById("result").innerHTML =
+      "❌ Camera could not start.<br>" +
+      "Please allow camera permission.";
+  });
+</script></body>
+</html>
